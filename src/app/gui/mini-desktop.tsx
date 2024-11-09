@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { File } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const MiniDesktop = () => {
+  // todo: clean up this code...
   const [selectedFile, setSelectedFile] = useState(null);
   const [openWindows, setOpenWindows] = useState([]);
   const [windowPositions, setWindowPositions] = useState({});
@@ -16,11 +18,9 @@ const MiniDesktop = () => {
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0 });
 
   const files = {
-    "todo.txt": "Shopping List:\n- Milk\n- Bread\n- Eggs\n- Coffee",
-    "armank.dev":
-      "Remember to:\n1. Call mom\n2. Pay bills\n3. Schedule dentist appointment",
-    "hello.txt":
-      "Hello World!\nThis is a sample text file.\nFeel free to click around!",
+    "armank.dev": "under construction... 🚧",
+    "projects.txt": "under construction... 🚧",
+    "experience.txt": "under construction... 🚧",
   };
 
   const handleFileClick = (fileName: string, e: React.MouseEvent) => {
@@ -296,6 +296,9 @@ const MiniDesktop = () => {
           borderTop: "2px solid #dfdfdf",
         }}
       >
+        <Link href="/" className="absolute right-0 mr-4 hover:underline">
+          prefer a CLI?
+        </Link>
         {openWindows.map((window) => (
           <button
             key={window.id}
