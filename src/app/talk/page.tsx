@@ -1,20 +1,27 @@
 "use client";
 import { useState } from "react";
 import { submitMessage } from "../actions";
+import Link from "next/link";
 
 function page() {
+  const [error, setError] = useState(true);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
-    await submitMessage(name, message);
+    await submitMessage(name, message)
+      .then(() => setError(false))
+      .catch(() => setError(true));
   };
 
   return (
     <div className="flex flex-col items-center justify-center mt-16 text-white">
       <div className="w-4/5 lg:w-1/2">
-        <div className="flex flex-col">
-          <p>leave me a message below if you want</p>
+        <div className="flex items-center gap-2">
+          <p>leave me an anonymous message below, or</p>{" "}
+          <Link className="hover:underline underline-offset-4" href="/">
+            [go back]
+          </Link>
         </div>
         <form className="flex flex-col gap-4 mt-24 items-end">
           <div className="flex items-end w-full">
