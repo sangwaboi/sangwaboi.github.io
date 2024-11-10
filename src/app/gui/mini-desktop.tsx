@@ -4,20 +4,41 @@ import { File } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+type File = {
+  fileName: string;
+  minimized: boolean;
+  id: string;
+};
+
+type WindowPosition = {
+  [key: string]: {
+    x: number;
+    y: number;
+  };
+};
+
+type WindowSize = {
+  [key: string]: {
+    width: number;
+    height: number;
+  };
+};
+
 const MiniDesktop = () => {
-  // todo: clean up this code...
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [openWindows, setOpenWindows] = useState([]);
-  const [windowPositions, setWindowPositions] = useState({});
-  const [windowSizes, setWindowSizes] = useState({});
-  const [isDragging, setIsDragging] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [openWindows, setOpenWindows] = useState<File[]>([]);
+  const [windowPositions, setWindowPositions] = useState<WindowPosition>({});
+  const [windowSizes, setWindowSizes] = useState<WindowSize | null>(null);
+  const [isDragging, setIsDragging] = useState<string | null>(null);
+  const [isResizing, setIsResizing] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [lastClickTime, setLastClickTime] = useState(0);
-  const [activeWindow, setActiveWindow] = useState(null);
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0 });
 
-  const files = {
+  const files: {
+    [key: string]: string;
+  } = {
     "armank.dev": "under construction... 🚧",
     "projects.txt": "under construction... 🚧",
     "experience.txt": "under construction... 🚧",
@@ -27,13 +48,13 @@ const MiniDesktop = () => {
     const currentTime = new Date().getTime();
     const timeSinceLastClick = currentTime - lastClickTime;
 
-    // @ts-ignore
-    if (e.target.id === "desktop-container") {
+    if (e.currentTarget.id === "desktop-container") {
       setSelectedFile(null);
       return;
     }
 
-    if (timeSinceLastClick < 300) {
+    // TODO: dblclick event?
+    if (timeSinceLastClick < 300 && selectedFile === fileName) {
       if (!openWindows.find((w) => w.fileName === fileName)) {
         const newWindow = {
           fileName,
@@ -50,7 +71,7 @@ const MiniDesktop = () => {
         }));
         setWindowSizes((prev) => ({
           ...prev,
-          [newWindow.id]: { width: 300, height: 250 },
+          [newWindow.id]: { width: 350, height: 250 },
         }));
         setActiveWindow(newWindow.id);
       }
@@ -61,7 +82,7 @@ const MiniDesktop = () => {
     setLastClickTime(currentTime);
   };
 
-  const handleWindowMouseDown = (windowId, e) => {
+  const handleWindowMouseDown = (windowId: string, e: any) => {
     if (e.target.closest(".window-title-bar")) {
       setIsDragging(windowId);
       const windowRect = e.currentTarget.getBoundingClientRect();
@@ -74,7 +95,7 @@ const MiniDesktop = () => {
     }
   };
 
-  const handleResizeStart = (windowId, e) => {
+  const handleResizeStart = (windowId: string, e: any) => {
     e.preventDefault();
     setIsResizing(windowId);
     setResizeStart({
@@ -84,11 +105,11 @@ const MiniDesktop = () => {
     setActiveWindow(windowId);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: any) => {
     if (isDragging) {
-      const container = document.getElementById("desktop-container");
+      const container = document.getElementById("desktop-container")!;
       const containerRect = container.getBoundingClientRect();
-      const windowElement = document.getElementById(isDragging);
+      const windowElement = document.getElementById(isDragging)!;
       const windowRect = windowElement.getBoundingClientRect();
 
       let newX = e.clientX - containerRect.left - dragOffset.x;
@@ -111,13 +132,17 @@ const MiniDesktop = () => {
       const deltaX = e.clientX - resizeStart.x;
       const deltaY = e.clientY - resizeStart.y;
 
-      setWindowSizes((prev) => ({
-        ...prev,
-        [isResizing]: {
-          width: Math.max(200, prev[isResizing].width + deltaX),
-          height: Math.max(150, prev[isResizing].height + deltaY),
-        },
-      }));
+      setWindowSizes((prev) =>
+        prev
+          ? {
+              ...prev,
+              [isResizing]: {
+                width: Math.max(200, prev[isResizing].width + deltaX),
+                height: Math.max(150, prev[isResizing].height + deltaY),
+              },
+            }
+          : null
+      );
 
       setResizeStart({
         x: e.clientX,
@@ -127,11 +152,11 @@ const MiniDesktop = () => {
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
-    setIsResizing(false);
+    setIsDragging(null);
+    setIsResizing(null);
   };
 
-  const toggleMinimize = (windowId) => {
+  const toggleMinimize = (windowId: string) => {
     setOpenWindows((prev) =>
       prev.map((window) =>
         window.id === windowId
@@ -141,7 +166,7 @@ const MiniDesktop = () => {
     );
   };
 
-  const closeWindow = (windowId) => {
+  const closeWindow = (windowId: string) => {
     setOpenWindows((prev) => prev.filter((window) => window.id !== windowId));
     setWindowPositions((prev) => {
       const newPositions = { ...prev };
@@ -164,7 +189,9 @@ const MiniDesktop = () => {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       onClick={(e) =>
-        setSelectedFile((s) => (e.target.id === "desktop-container" ? null : s))
+        setSelectedFile((s) =>
+          e.currentTarget?.id === "desktop-container" ? null : s
+        )
       }
     >
       {/* Desktop Icons */}
@@ -183,12 +210,12 @@ const MiniDesktop = () => {
               width={64}
               height={64}
               src="https://win98icons.alexmeub.com/icons/png/file_lines-0.png"
-              className={`w-8 h-8 ${
+              className={`w-8 h-8 select-none ${
                 selectedFile === fileName ? "text-blue-500" : "text-blue-400"
               }`}
             />
             <span
-              className={`text-sm mt-1 px-1 rounded text-center
+              className={`text-sm mt-1 px-1 rounded text-center select-none
               ${selectedFile === fileName ? "bg-blue-500 text-white" : ""}`}
             >
               {fileName}
@@ -204,12 +231,12 @@ const MiniDesktop = () => {
             <div
               key={window.id}
               id={window.id}
-              className="absolute bg-gray-200 rounded-none shadow-lg"
+              className="absolute select-none bg-gray-200 rounded-none shadow-lg"
               style={{
                 left: `${windowPositions[window.id]?.x}px`,
                 top: `${windowPositions[window.id]?.y}px`,
-                width: `${windowSizes[window.id]?.width}px`,
-                height: `${windowSizes[window.id]?.height}px`,
+                width: `${windowSizes ? windowSizes[window.id]?.width : 0}px`,
+                height: `${windowSizes ? windowSizes[window.id]?.height : 0}px`,
                 cursor: isDragging === window.id ? "grabbing" : "auto",
                 zIndex: activeWindow === window.id ? 10 : 1,
                 border: "2px solid #c0c0c0",
@@ -227,13 +254,13 @@ const MiniDesktop = () => {
                   padding: "2px 3px",
                 }}
               >
-                <span className="text-sm font-normal text-white">
+                <span className="text-sm font-normal text-white select-none">
                   Notepad - {window.fileName}
                 </span>
                 <div className="flex space-x-1">
                   <button
                     onClick={() => toggleMinimize(window.id)}
-                    className="w-4 h-4 bg-gray-200 flex items-center justify-center"
+                    className="w-4 h-4 bg-gray-200 hover:bg-gray-400 flex items-center justify-center"
                     style={{
                       border: "1px solid #000",
                       borderRight: "1px solid #848484",
@@ -244,7 +271,7 @@ const MiniDesktop = () => {
                   </button>
                   <button
                     onClick={() => closeWindow(window.id)}
-                    className="w-4 h-4 bg-gray-200 flex items-center justify-center"
+                    className="w-4 h-4 bg-gray-300 hover:bg-gray-400 flex items-center justify-center"
                     style={{
                       border: "1px solid #000",
                       borderRight: "1px solid #848484",
@@ -258,10 +285,10 @@ const MiniDesktop = () => {
 
               {/* Menu Bar */}
               <div className="bg-gray-200 text-xs border-b border-gray-400 px-1 py-0.5">
-                <span className="mr-4">File</span>
-                <span className="mr-4">Edit</span>
-                <span className="mr-4">Format</span>
-                <span>Help</span>
+                <span className="px-2 hover:bg-gray-400">File</span>
+                <span className="px-2 hover:bg-gray-400">Edit</span>
+                <span className="px-2 hover:bg-gray-400">Format</span>
+                <span className="px-2 hover:bg-gray-400">Help</span>
               </div>
 
               {/* Window Content */}
@@ -302,7 +329,7 @@ const MiniDesktop = () => {
         {openWindows.map((window) => (
           <button
             key={window.id}
-            className="h-6 px-2 flex items-center"
+            className="h-6 px-2 flex items-center select-none"
             style={{
               background: activeWindow === window.id ? "#bdbdbd" : "#c0c0c0",
               border: "2px solid #808080",
@@ -317,8 +344,8 @@ const MiniDesktop = () => {
             }}
           >
             <File className="w-4 h-4 mr-2" />
-            <span className="text-sm truncate max-w-[120px]">
-              {window.fileName}
+            <span className="text-sm truncate max-w-[120px] select-none">
+              <p>{window.fileName}</p>
             </span>
           </button>
         ))}
