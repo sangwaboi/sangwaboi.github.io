@@ -10,9 +10,7 @@ export default function Home() {
             &gt; my name is arman, i'm studying computer science and mathematics
             at the university of florida
           </p>
-          <p>
-            &gt; i like full-stack web dev and typescript
-          </p>
+          <p>&gt; i like full-stack web dev and typescript</p>
           <p>&gt; feel free to reach out to me!</p>
           <div className="flex gap-4 text-indigo-300">
             <Link
@@ -38,6 +36,12 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               [linkedin]
+            </Link>
+            <Link
+              className="hover:font-bold hover:underline underline-offset-4"
+              href="/talk"
+            >
+              [leave an anonymous note]
             </Link>
           </div>
         </div>
