@@ -11,6 +11,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "arman's living room",
   description: "arman's living room",
+  keywords: ["arman", "kumaraswamy", "arman kumaraswamy", "arman's living room", "armank", "armank.dev", "armank dev"],
 };
 
 export default function RootLayout({

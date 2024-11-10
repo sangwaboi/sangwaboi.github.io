@@ -11,8 +11,7 @@ export default function Home() {
             at the university of florida
           </p>
           <p>
-            &gt; i like web dev and enjoy working with typescript, react,
-            postgres, etc.
+            &gt; i like full-stack web dev and typescript
           </p>
           <p>&gt; feel free to reach out to me!</p>
           <div className="flex gap-4 text-indigo-300">
