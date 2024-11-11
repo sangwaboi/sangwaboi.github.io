@@ -15,15 +15,12 @@ function page() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-16 text-white">
+    <div className="flex flex-col items-center justify-center mt-24 text-white">
       <div className="w-4/5 lg:w-1/2">
         <div className="flex items-center gap-2">
-          <p>leave me an anonymous message below, or</p>{" "}
-          <Link className="hover:underline underline-offset-4" href="/">
-            [go back]
-          </Link>
+          <p>write me a note below, i check these frequently</p>
         </div>
-        <form className="flex flex-col gap-4 mt-24 items-end">
+        <form className="flex flex-col gap-4 mt-20 items-end">
           <div className="flex items-end w-full">
             <input
               value={name}
@@ -48,12 +45,16 @@ function page() {
               {message.length}/420
             </p>
           </div>
+          <div className="flex w-full items-center justify-between">
+          <Link className="hover:underline underline-offset-4" href="/">
+            [go back]
+          </Link>
           <p
             onClick={handleSubmit}
             className="hover:text-blue-300 hover:underline underline-offset-4 cursor-pointer"
           >
             [submit]
-          </p>
+          </p></div>
         </form>
       </div>
     </div>
