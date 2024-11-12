@@ -12,7 +12,7 @@ export default function Home() {
           </p>
           <p>&gt; i like full-stack web dev and typescript</p>
           <p>&gt; feel free to reach out to me!</p>
-          <div className="flex gap-4 text-indigo-300">
+          <div className="flex sm:flex-row flex-col gap-4 text-indigo-300">
             <Link
               className="hover:font-bold hover:underline underline-offset-4"
               href="https://x.com/ksw_arman"
