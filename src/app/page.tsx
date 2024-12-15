@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CLI from "../components/cli";
 
 export default function Home() {
   return (
@@ -45,14 +46,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="hidden sm:block">
-          <span className="mr-2">$</span>
-          <input
-            type="text"
-            className="bg-transparent border-none outline-none flex-grow"
-            autoFocus
-          />
-        </div>
+        <CLI />
       </div>
       <Link
         href="/gui"
