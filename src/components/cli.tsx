@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-const commands = ["whoami", "ls", "help", "cat", "clear"];
+const commands = ["whoami", "ls", "help", "cat", "clear", "./gui.app"];
 
 interface Message {
   message: string;
@@ -21,6 +21,10 @@ function CLI() {
       name: "socials.txt",
       content:
         "twitter: ksw_arman\ngithub: armans-code\nlinkedin: armankumaraswamy",
+    },
+    {
+      name: "gui.app",
+      content: "run './gui.app' to open the GUI version of this website",
     },
   ]);
 
@@ -53,6 +57,16 @@ function CLI() {
           break;
         case "clear":
           setMessages([]);
+          break;
+        case "./gui.app":
+          setMessages((prev) => [
+            ...prev,
+            {
+              message: "opening GUI...",
+              type: "output",
+            },
+          ]);
+          window.location.href = "/gui";
           break;
         default:
           if (input.startsWith("cat")) {
