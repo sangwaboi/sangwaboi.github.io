@@ -66,7 +66,9 @@ function CLI() {
               type: "output",
             },
           ]);
-          window.location.href = "/gui";
+          setTimeout(() => {
+            window.location.href = "/gui";
+          }, 500);
           break;
         default:
           if (input.startsWith("cat")) {
