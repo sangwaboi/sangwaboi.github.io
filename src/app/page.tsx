@@ -50,7 +50,7 @@ export default function Home() {
       </div>
       <Link
         href="/gui"
-        className="absolute bottom-0 right-0 mr-4 mb-4 hover:underline"
+        className="fixed bottom-0 right-0 mr-4 mb-4 hover:underline"
       >
         prefer a GUI?
       </Link>
