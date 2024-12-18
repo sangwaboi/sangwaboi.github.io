@@ -158,6 +158,9 @@ function CLI() {
           <span className="mr-2">$</span>
           <input
             type="text"
+            placeholder={
+              messages.length === 0 ? "type `help` for a list of commands" : ""
+            }
             className="bg-transparent border-none outline-none flex-grow w-full"
             autoFocus
             value={input}
