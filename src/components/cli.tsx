@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const commands = ["whoami", "ls", "help", "cat", "clear", "./gui.app"];
 
@@ -33,10 +33,11 @@ function CLI() {
     },
   ]);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessages((prev) => [...prev, { message: input, type: "input" }]);
-    console.log(messages);
     if (commands.includes(input.split(" ")[0])) {
       switch (input) {
         case "whoami":
@@ -109,7 +110,6 @@ function CLI() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log(messages);
       if (e.key === "ArrowUp") {
         setInput(
           messages
@@ -125,6 +125,10 @@ function CLI() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
+  }, [messages]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
@@ -144,6 +148,7 @@ function CLI() {
           {message.message}
         </p>
       ))}
+      <div ref={bottomRef} />
       <form
         id="cli"
         onSubmit={handleSubmit}
