@@ -74,7 +74,7 @@ function CLI() {
           ]);
           setTimeout(() => {
             window.location.href = "/gui";
-          }, 500);
+          }, 300);
           break;
         default:
           if (input.startsWith("cat")) {
