@@ -39,6 +39,7 @@ const MiniDesktop = () => {
   const files: {
     [key: string]: string;
   } = {
+    Terminal: "under construction... 🚧",
     "armank.dev": "under construction... 🚧",
     "projects.txt": "under construction... 🚧",
     "experience.txt": "under construction... 🚧",
@@ -53,9 +54,14 @@ const MiniDesktop = () => {
       return;
     }
 
-    // TODO: dblclick event?
+    // TODO: make this dblclick event?
     if (timeSinceLastClick < 300 && selectedFile === fileName) {
       if (!openWindows.find((w) => w.fileName === fileName)) {
+        if (fileName === "Terminal") {
+          window.location.href = "/";
+          setLastClickTime(currentTime);
+          return;
+        }
         const newWindow = {
           fileName,
           minimized: false,
@@ -195,7 +201,7 @@ const MiniDesktop = () => {
       }
     >
       {/* Desktop Icons */}
-      <div className="grid grid-cols-3 gap-4 w-fit p-4">
+      <div className="grid grid-cols-4 gap-4 w-fit p-4">
         {Object.keys(files).map((fileName) => (
           <div
             key={fileName}
@@ -209,7 +215,11 @@ const MiniDesktop = () => {
               alt="File Icon"
               width={64}
               height={64}
-              src="https://win98icons.alexmeub.com/icons/png/file_lines-0.png"
+              src={
+                fileName === "Terminal"
+                  ? "https://win98icons.alexmeub.com/icons/png/console_prompt-0.png"
+                  : "https://win98icons.alexmeub.com/icons/png/file_lines-0.png"
+              }
               className={`w-8 h-8 select-none ${
                 selectedFile === fileName ? "text-blue-500" : "text-blue-400"
               }`}
