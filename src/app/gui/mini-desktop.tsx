@@ -284,7 +284,7 @@ const MiniDesktop = () => {
                   </button>
                   <button
                     onClick={() => closeWindow(window.id)}
-                    className="w-4 h-4 bg-gray-300 hover:bg-gray-400 flex items-center justify-center"
+                    className="w-4 h-4 bg-gray-200 hover:bg-gray-400 flex items-center justify-center"
                     style={{
                       border: "1px solid #000",
                       borderRight: "1px solid #848484",
@@ -356,7 +356,10 @@ const MiniDesktop = () => {
               setActiveWindow(window.id);
             }}
           >
-            <File className="w-4 h-4 mr-2" />
+            <img
+              src="https://win98icons.alexmeub.com/icons/png/file_lines-0.png"
+              className="w-4 h-4 mr-2"
+            />
             <span className="text-sm truncate max-w-[120px] select-none">
               <p>{window.fileName}</p>
             </span>
