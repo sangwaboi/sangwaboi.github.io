@@ -42,8 +42,10 @@ const MiniDesktop = () => {
     Terminal: "under construction... 🚧",
     "armank.dev":
       "hi! my name is arman, i'm studying computer science and mathematics at the university of florida.\n\ni like full-stack web dev and typescript.\n\nfeel free to reach out to me!",
-    "projects.txt": "under construction... 🚧",
-    "experience.txt": "under construction... 🚧",
+    "experience.txt":
+      "apten (s24):\n - software engineer intern (may 2024 - july 2024)\n - Next.js, LangChain, AWS CDK\n\nstudydojo (f24):\n - software engineer (october 2023 - march 2024)\n - Next.js, PostgreSQL, NoSQL\n\nsolace health:\n - software engineer intern (july 2023 - october 2023)\n - Next.js, NestJS, PostgreSQL, Redis",
+    "socials.txt":
+      "twitter: ksw_arman\ngithub: armans-code\nlinkedin: armankumaraswamy",
   };
 
   const handleFileClick = (fileName: string, e: React.MouseEvent) => {
@@ -78,7 +80,7 @@ const MiniDesktop = () => {
         }));
         setWindowSizes((prev) => ({
           ...prev,
-          [newWindow.id]: { width: 350, height: 250 },
+          [newWindow.id]: { width: 500, height: 300 },
         }));
         setActiveWindow(newWindow.id);
       }
