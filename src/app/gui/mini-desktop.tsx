@@ -40,7 +40,8 @@ const MiniDesktop = () => {
     [key: string]: string;
   } = {
     Terminal: "under construction... 🚧",
-    "armank.dev": "under construction... 🚧",
+    "armank.dev":
+      "hi! my name is arman, i'm studying computer science and mathematics at the university of florida.\n\ni like full-stack web dev and typescript.\n\nfeel free to reach out to me!",
     "projects.txt": "under construction... 🚧",
     "experience.txt": "under construction... 🚧",
   };
