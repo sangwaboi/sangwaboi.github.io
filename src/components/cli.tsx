@@ -108,9 +108,6 @@ function CLI() {
             }
             const file = files.find((file) => file.name === fileName);
             if (file) {
-              if (!file.content) {
-                console.log("idiot");
-              }
               setMessages((prev) => [
                 ...prev,
                 { message: file.content, type: "output" },
