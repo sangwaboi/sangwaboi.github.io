@@ -40,7 +40,7 @@ const MiniDesktop = () => {
   useEffect(() => {
     const getCat = async () => {
       const image = await fetch(
-        `https://cataas.com/cat?width=200&height=200`
+        `https://cataas.com/cat?width=300&height=300`
       ).then((data) => data.blob());
       const imageUrl = URL.createObjectURL(image);
       setCatImage(imageUrl);
@@ -323,8 +323,14 @@ const MiniDesktop = () => {
 
               {/* Window Content */}
               <div className="bg-white h-[calc(100%-44px)] p-1">
+                <p>tip: try reloading the page</p>
                 {window.fileName === "cat.png" ? (
-                  <img src={catImage} className="w-full h-full object-cover" />
+                  <>
+                    <img
+                      src={catImage}
+                      className="w-full h-[90%] object-cover"
+                    />
+                  </>
                 ) : (
                   <textarea
                     className="w-full h-full resize-none p-1 border-none focus:outline-none font-mono text-sm"
