@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/icons/**",
       },
+      {
+        protocol: "https",
+        hostname: "static.vecteezy.com",
+        port: "",
+        pathname:
+          "/system/resources/thumbnails/025/221/361/small_2x/cartoon-cat-cute-ai-generate-png.png",
+      },
     ],
   },
 };

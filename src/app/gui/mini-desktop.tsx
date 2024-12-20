@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { File } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,6 +35,18 @@ const MiniDesktop = () => {
   const [lastClickTime, setLastClickTime] = useState(0);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0 });
+  const [catImage, setCatImage] = useState<string>("");
+
+  useEffect(() => {
+    const getCat = async () => {
+      const image = await fetch(
+        `https://cataas.com/cat?width=200&height=200`
+      ).then((data) => data.blob());
+      const imageUrl = URL.createObjectURL(image);
+      setCatImage(imageUrl);
+    };
+    getCat();
+  }, []);
 
   const files: {
     [key: string]: string;
@@ -46,6 +58,7 @@ const MiniDesktop = () => {
       "apten (s24):\n - software engineer intern (may 2024 - july 2024)\n - Next.js, LangChain, AWS CDK\n\nstudydojo (f24):\n - software engineer (october 2023 - march 2024)\n - Next.js, PostgreSQL, NoSQL\n\nsolace health:\n - software engineer intern (july 2023 - october 2023)\n - Next.js, NestJS, PostgreSQL, Redis",
     "socials.txt":
       "twitter: ksw_arman\ngithub: armans-code\nlinkedin: armankumaraswamy",
+    "cat.png": "🐈",
   };
 
   const handleFileClick = (fileName: string, e: React.MouseEvent) => {
@@ -204,7 +217,7 @@ const MiniDesktop = () => {
       }
     >
       {/* Desktop Icons */}
-      <div className="grid grid-cols-4 gap-4 w-fit p-4">
+      <div className="grid grid-cols-5 gap-4 w-fit p-4">
         {Object.keys(files).map((fileName) => (
           <div
             key={fileName}
@@ -221,6 +234,8 @@ const MiniDesktop = () => {
               src={
                 fileName === "Terminal"
                   ? "https://win98icons.alexmeub.com/icons/png/console_prompt-0.png"
+                  : fileName === "cat.png"
+                  ? "https://static.vecteezy.com/system/resources/thumbnails/025/221/361/small_2x/cartoon-cat-cute-ai-generate-png.png"
                   : "https://win98icons.alexmeub.com/icons/png/file_lines-0.png"
               }
               className={`w-8 h-8 select-none ${
@@ -268,7 +283,9 @@ const MiniDesktop = () => {
                 }}
               >
                 <span className="text-sm font-normal text-white select-none">
-                  Notepad - {window.fileName}
+                  {window.fileName === "cat.png"
+                    ? "cat.png"
+                    : `Notepad - ${window.fileName}`}
                 </span>
                 <div className="flex space-x-1">
                   <button
@@ -306,14 +323,18 @@ const MiniDesktop = () => {
 
               {/* Window Content */}
               <div className="bg-white h-[calc(100%-44px)] p-1">
-                <textarea
-                  className="w-full h-full resize-none p-1 border-none focus:outline-none font-mono text-sm"
-                  style={{
-                    background: "white",
-                  }}
-                  value={files[window.fileName]}
-                  readOnly
-                />
+                {window.fileName === "cat.png" ? (
+                  <img src={catImage} className="w-full h-full object-cover" />
+                ) : (
+                  <textarea
+                    className="w-full h-full resize-none p-1 border-none focus:outline-none font-mono text-sm"
+                    style={{
+                      background: "white",
+                    }}
+                    value={files[window.fileName]}
+                    readOnly
+                  />
+                )}
               </div>
 
               {/* Resize Handle */}
