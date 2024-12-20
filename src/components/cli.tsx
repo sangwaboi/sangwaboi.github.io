@@ -1,7 +1,16 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 
-const commands = ["", "whoami", "ls", "help", "cat", "clear", "./gui.app"];
+const commands = [
+  "",
+  "whoami",
+  "ls",
+  "help",
+  "cat",
+  "clear",
+  "touch",
+  "./gui.app",
+];
 
 interface Message {
   message: string;
@@ -39,8 +48,8 @@ function CLI() {
     e.preventDefault();
     setMessages((prev) => [...prev, { message: input, type: "input" }]);
     if (commands.includes(input.split(" ")[0])) {
-      switch (input) {        
-	case "whoami":
+      switch (input) {
+        case "whoami":
           setMessages((prev) => [
             ...prev,
             { message: "arman", type: "output" },
@@ -58,7 +67,7 @@ function CLI() {
         case "help":
           setMessages((prev) => [
             ...prev,
-            { message: commands.join("\n"), type: "output" },
+            { message: commands.join("\n").slice(1), type: "output" },
           ]);
           break;
         case "clear":
