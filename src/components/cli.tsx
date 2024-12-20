@@ -54,8 +54,14 @@ function CLI() {
     if (commands.includes(input.split(" ")[0])) {
       switch (input) {
         case "reset":
-          setMessages([]);
           setFiles(INITIAL_FILES);
+          setMessages((prev) => [
+            ...prev,
+            {
+              message: "Reset files to initial state",
+              type: "output",
+            },
+          ]);
           break;
         case "whoami":
           setMessages((prev) => [
