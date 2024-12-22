@@ -323,9 +323,9 @@ const MiniDesktop = () => {
 
               {/* Window Content */}
               <div className="bg-white h-[calc(100%-44px)] p-1">
-                <p>tip: try reloading the page</p>
                 {window.fileName === "cat.png" ? (
                   <>
+                    <p>tip: try reloading the page</p>
                     <img
                       src={catImage}
                       className="w-full h-[90%] object-cover"
