@@ -87,13 +87,13 @@ const MiniDesktop = () => {
         setWindowPositions((prev) => ({
           ...prev,
           [newWindow.id]: {
-            x: 50 + openWindows.length * 20,
-            y: 50 + openWindows.length * 20,
+            x: 20 + openWindows.length * 20,
+            y: 40 + openWindows.length * 20,
           },
         }));
         setWindowSizes((prev) => ({
           ...prev,
-          [newWindow.id]: { width: 500, height: 300 },
+          [newWindow.id]: { width: 350, height: 350 },
         }));
         setActiveWindow(newWindow.id);
       }
@@ -217,7 +217,7 @@ const MiniDesktop = () => {
       }
     >
       {/* Desktop Icons */}
-      <div className="grid grid-cols-5 gap-4 w-fit p-4">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 w-fit p-4">
         {Object.keys(files).map((fileName) => (
           <div
             key={fileName}
