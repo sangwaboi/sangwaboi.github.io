@@ -280,7 +280,7 @@ function CLI() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full"
       >
-        <div className="hidden sm:flex">
+        <div className="flex">
           <span className="mr-2">$</span>
           <input
             type="text"
