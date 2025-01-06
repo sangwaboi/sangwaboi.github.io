@@ -56,8 +56,8 @@ function CLI() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessages((prev) => [...prev, { message: input, type: "input" }]);
-    if (commands.includes(input.split(" ")[0])) {
-      switch (input) {
+    if (commands.includes(input.toLowerCase().split(" ")[0])) {
+      switch (input.toLowerCase()) {
         case "reset":
           setFiles(INITIAL_FILES);
           setMessages((prev) => [
@@ -117,8 +117,8 @@ function CLI() {
           }, 300);
           break;
         default:
-          if (input.startsWith("cat")) {
-            const fileName = input.split(" ")[1];
+          if (input.toLowerCase().startsWith("cat")) {
+            const fileName = input.toLowerCase().split(" ")[1];
             if (!fileName) {
               setMessages((prev) => [
                 ...prev,
@@ -144,8 +144,8 @@ function CLI() {
                 },
               ]);
             }
-          } else if (input.startsWith("touch")) {
-            const fileName = input.split(" ")[1];
+          } else if (input.toLowerCase().startsWith("touch")) {
+            const fileName = input.toLowerCase().split(" ")[1];
             if (!fileName) {
               setMessages((prev) => [
                 ...prev,
@@ -197,8 +197,8 @@ function CLI() {
               }
               return;
             }
-          } else if (input.startsWith("rm")) {
-            const fileName = input.split(" ")[1];
+          } else if (input.toLowerCase().startsWith("rm")) {
+            const fileName = input.toLowerCase().split(" ")[1];
             if (!fileName) {
               setMessages((prev) => [
                 ...prev,
