@@ -17,5 +17,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return Response.json({ success: true });
+  return new Response("OK", {
+    status: 200,
+  });
 }
