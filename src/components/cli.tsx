@@ -3,6 +3,10 @@ import React, { useEffect, useState, useRef } from "react";
 
 const INITIAL_FILES = [
   {
+    name: "thoughts",
+    content: "run 'cd thoughts' to see my thoughts on various topics",
+  },
+  {
     name: "experience.txt",
     content:
       "apten (s24):\n - software engineer intern (may 2024 - july 2024)\n - Next.js, LangChain, AWS CDK\n\nstudydojo (f24):\n - software engineer (october 2023 - march 2024)\n - Next.js, PostgreSQL, NoSQL\n\nsolace health:\n - software engineer intern (july 2023 - october 2023)\n - Next.js, NestJS, PostgreSQL, Redis",
@@ -27,6 +31,7 @@ const commands = [
   "whoami",
   "ls",
   "help",
+  "cd",
   "cat",
   "clear",
   "touch",
@@ -216,6 +221,39 @@ function CLI() {
                 ...prev,
                 {
                   message: `rm: ${fileName}: No such file or directory`,
+                  type: "output",
+                },
+              ]);
+            }
+          } else if (input.toLowerCase().startsWith("cd")) {
+            if (input.toLowerCase().trim() === "cd") {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  message: "",
+                  type: "output",
+                },
+              ]);
+              break;
+            }
+            if (input.toLowerCase().split(" ").length > 2) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  message: `cd: too many arguments`,
+                  type: "output",
+                },
+              ]);
+              break;
+            }
+            const directory = input.toLowerCase().split(" ")[1];
+            if (directory == "thoughts") {
+              window.location.href = "/thoughts";
+            } else {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  message: `cd: no such file or directory: ${directory}`,
                   type: "output",
                 },
               ]);
