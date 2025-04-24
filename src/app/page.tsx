@@ -19,6 +19,15 @@ export default function Home() {
             &gt; i'm a big believer in authentic, compounding relationships.
             feel free to reach out to me!
           </p>
+          <p>
+            &gt; currently working on{" "}
+            <Link
+              className="underline decoration-orange-300"
+              href="/thoughts/1"
+            >
+              indexing my life for LLMs
+            </Link>
+          </p>
           <div className="flex sm:flex-row flex-col gap-4 text-indigo-300">
             <Link
               className="hover:font-bold hover:underline underline-offset-4"
