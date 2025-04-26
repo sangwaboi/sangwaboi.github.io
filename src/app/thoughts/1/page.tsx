@@ -48,8 +48,8 @@ function Page() {
       </div>
       <p>
         This project genuinely doesn't leave my mind - I've thought about it
-        almost every single day for the last few months. I'm not exactly sure it
-        piques my interest so much, but I know I want to work on it. I'm
+        almost every single day for the last few months. I'm not exactly sure
+        why it piques my interest so much, but I know I want to work on it. I'm
         planning on spending most of my free time in the next few months working
         on this and hope to have a reasonable proof of concept by the end of the
         summer.
