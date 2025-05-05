@@ -63,12 +63,12 @@ export default function Home() {
         </div>
         <CLI />
       </div>
-      <Link
+      {/* <Link
         href="/gui"
         className="fixed bottom-0 right-0 mr-4 mb-4 hover:underline"
       >
         prefer a GUI?
-      </Link>
+      </Link> */}
     </div>
   );
 }
