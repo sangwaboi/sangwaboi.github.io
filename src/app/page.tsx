@@ -53,11 +53,17 @@ export default function Home() {
             >
               [linkedin]
             </Link>
-            <Link
+            {/* <Link
               className="hover:font-bold hover:underline underline-offset-4"
               href="/talk"
             >
               [leave an anonymous note]
+            </Link> */}
+            <Link
+              className="hover:font-bold hover:underline underline-offset-4"
+              href="/thoughts"
+            >
+              [thoughts]
             </Link>
           </div>
         </div>

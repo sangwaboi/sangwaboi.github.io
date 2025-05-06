@@ -20,10 +20,10 @@ const INITIAL_FILES = [
     name: "gui.app",
     content: "run './gui.app' to open the GUI version of this website",
   },
-  {
-    name: "talk.app",
-    content: "run './talk.app' to leave an anonymous note for me",
-  },
+  // {
+  //   name: "talk.app",
+  //   content: "run './talk.app' to leave an anonymous note for me",
+  // },
 ];
 
 const commands = [
@@ -38,7 +38,7 @@ const commands = [
   "rm",
   "reset",
   "./gui.app",
-  "./talk.app",
+  // "./talk.app",
 ];
 
 interface Message {
@@ -109,18 +109,18 @@ function CLI() {
             window.location.href = "/gui";
           }, 300);
           break;
-        case "./talk.app":
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: "opening talk...",
-              type: "output",
-            },
-          ]);
-          setTimeout(() => {
-            window.location.href = "/talk";
-          }, 300);
-          break;
+        // case "./talk.app":
+        //   setMessages((prev) => [
+        //     ...prev,
+        //     {
+        //       message: "opening talk...",
+        //       type: "output",
+        //     },
+        //   ]);
+        //   setTimeout(() => {
+        //     window.location.href = "/talk";
+        //   }, 300);
+        //   break;
         default:
           if (input.toLowerCase().startsWith("cat")) {
             const fileName = input.toLowerCase().split(" ")[1];
