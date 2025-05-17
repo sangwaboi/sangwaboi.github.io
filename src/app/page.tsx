@@ -37,7 +37,7 @@ export default function Home() {
               className="underline decoration-orange-300"
               href="/thoughts/1"
             >
-              indexing my life for LLMs
+              index my life for LLMs
             </Link>
           </p>
           <div className="flex sm:flex-row flex-col gap-4 text-indigo-300">
