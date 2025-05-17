@@ -6,7 +6,10 @@ export default function Home() {
     <div className="text-gray-300 p-4 w-full flex justify-center">
       <div>
         <div className="mb-4 mt-16 flex flex-col gap-4">
-          <p>Arman Kumaraswamy</p>
+          <div>
+            <p>Arman Kumaraswamy</p>
+            <p className="text-gray-400 text-sm">San Francisco, CA</p>
+          </div>
           <p>&gt; hi!</p>
           <p>
             &gt; my name is arman, i'm studying computer science and mathematics
@@ -20,7 +23,16 @@ export default function Home() {
             feel free to reach out to me!
           </p>
           <p>
-            &gt; currently working on{" "}
+            &gt; currently interning at{" "}
+            <Link
+              className="underline decoration-green-500"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://mintlify.com/"
+            >
+              Mintlify
+            </Link>{" "}
+            and attempting to{" "}
             <Link
               className="underline decoration-orange-300"
               href="/thoughts/1"
