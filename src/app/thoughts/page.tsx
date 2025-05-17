@@ -2,7 +2,7 @@ import Link from "next/link";
 
 function Page() {
   return (
-    <div className="w-3/5 flex flex-col gap-8">
+    <div className="md:w-3/5 w-4/5 flex flex-col gap-8">
       <div className="relative mb-4">
         <h1 className="absolute -left-5">
           <Link className="hover:underline" href="/">
