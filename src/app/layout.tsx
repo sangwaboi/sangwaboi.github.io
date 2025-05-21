@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sangwaboi.github.io"), // Assuming your GitHub pages URL
+  metadataBase: new URL("https://sangwaboi.me"), // Updated to custom domain
   title: "Vishvendra Sangwa's Space",
   description: "Vishvendra Sangwa's personal website and thoughts.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Vishvendra Sangwa's Space",
-    url: "https://sangwaboi.github.io", // Assuming your GitHub pages URL
+    url: "https://sangwaboi.me", // Updated to custom domain
     description: "Vishvendra Sangwa's personal website and thoughts.",
     // You can add an image here later if you want
     // images: [
