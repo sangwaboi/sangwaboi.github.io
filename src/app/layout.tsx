@@ -1,25 +1,47 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  title: "arman's living room",
-  description: "arman's living room",
+  metadataBase: new URL("https://sangwaboi.github.io"), // Assuming your GitHub pages URL
+  title: "Vishvendra Sangwa's Space",
+  description: "Vishvendra Sangwa's personal website and thoughts.",
   keywords: [
-    "arman",
-    "kumaraswamy",
-    "arman kumaraswamy",
-    "arman's living room",
-    "armank",
-    "armank.dev",
-    "armank dev",
+    "vishvendra",
+    "sangwa",
+    "vishvendra sangwa",
+    "sangwaboi",
+    "portfolio",
+    "blog",
+    "thoughts",
+    "developer",
+    "ai/ml",
+    "robotics",
+    "web3"
   ],
+  openGraph: {
+    title: "Vishvendra Sangwa's Space",
+    url: "https://sangwaboi.github.io", // Assuming your GitHub pages URL
+    description: "Vishvendra Sangwa's personal website and thoughts.",
+    // You can add an image here later if you want
+    // images: [
+    //   {
+    //     url: "/og-image.png", 
+    //     width: 800,
+    //     height: 600,
+    //   },
+    // ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vishvendra Sangwa's Space",
+    description: "Vishvendra Sangwa's personal website and thoughts.",
+    creator: "@sangwaboii",
+    // You can add an image here later
+    // images: ["/twitter-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -28,8 +50,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="bg-[#0f0f0f]" lang="en">
-      <body className={geistMono.className}>{children}</body>
+    <html lang="en" className={GeistMono.className}>
+      <body>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

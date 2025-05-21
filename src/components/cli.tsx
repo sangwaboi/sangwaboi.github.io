@@ -4,29 +4,24 @@ import React, { useEffect, useState, useRef } from "react";
 const INITIAL_FILES = [
   {
     name: "thoughts",
-    content: "run 'cd thoughts' to see my thoughts on various topics",
+    content: "run 'cd thoughts' or type 'thoughts' to see my thoughts on various topics",
   },
   {
-    name: "experience.txt",
-    content:
-      "apten (s24):\n - software engineer intern (may 2024 - july 2024)\n - Next.js, LangChain, AWS CDK\n\nstudydojo (f24):\n - software engineer (october 2023 - march 2024)\n - Next.js, PostgreSQL, NoSQL\n\nsolace health:\n - software engineer intern (july 2023 - october 2023)\n - Next.js, NestJS, PostgreSQL, Redis",
+    name: "blogs",
+    content: "run 'cd blogs' or type 'blogs' to see my blogs",
   },
   {
     name: "socials.txt",
     content:
-      "twitter: ksw_arman\ngithub: armans-code\nlinkedin: armankumaraswamy",
+      "twitter: sangwaboii\ngithub: sangwaboi\nlinkedin: sangwa-vishvendra",
   },
   {
     name: "gui.app",
-    content: "run './gui.app' to open the GUI version of this website",
+    content: "run './gui.app' to open the GUI version of this website (if available)",
   },
-  // {
-  //   name: "talk.app",
-  //   content: "run './talk.app' to leave an anonymous note for me",
-  // },
 ];
 
-const commands = [
+const COMMAND_LIST = [
   "",
   "whoami",
   "ls",
@@ -34,304 +29,211 @@ const commands = [
   "cd",
   "cat",
   "clear",
-  "touch",
-  "rm",
+  "socials",
+  "thoughts",
+  "blogs",
   "reset",
   "./gui.app",
-  // "./talk.app",
+  "exit", // Added exit to the command list
 ];
 
 interface Message {
-  message: string;
+  message: string | React.ReactNode;
   type: "input" | "output";
 }
 
 interface File {
   name: string;
-  content: string;
+  content: string | React.ReactNode;
 }
+
+const USER_INFO = {
+  name: "Vishvendra Sangwa",
+  bio: "Student of Computer Science and AI/ML at the School of Tech Polaris. Interested in web3, Robotics, and AI agentic flows. Believer in authentic, compounding relationships. Currently building some BaaS.",
+  location: "Bengaluru, KA",
+  socialsText:
+    "twitter: https://x.com/sangwaboii\ngithub: https://github.com/sangwaboi\nlinkedin: https://www.linkedin.com/in/sangwa-vishvendra/",
+};
 
 function CLI() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>(INITIAL_FILES);
+  const [currentDir, setCurrentDir] = useState("~");
 
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const executeCommand = (command: string) => {
+    const newMessages: Message[] = [];
+    const parts = command.trim().toLowerCase().split(" ");
+    const baseCmd = parts[0];
+    const arg = parts[1];
+
+    switch (baseCmd) {
+      case "reset":
+        setFiles(INITIAL_FILES);
+        setCurrentDir("~");
+        newMessages.push({
+          message: "System reset to initial state.",
+          type: "output",
+        });
+        break;
+      case "whoami":
+        newMessages.push({ message: USER_INFO.name, type: "output" });
+        newMessages.push({ message: USER_INFO.bio, type: "output" });
+        newMessages.push({ message: USER_INFO.location, type: "output" });
+        break;
+      case "ls":
+        if (currentDir === "~" || currentDir === "/") {
+          newMessages.push({
+            message: files.map((file) => file.name).join("\n"),
+            type: "output",
+          });
+        } else if (currentDir === "thoughts") {
+          newMessages.push({ message: "thought1.md\nthought2.md", type: "output" }); // Placeholder
+        } else if (currentDir === "blogs") {
+          newMessages.push({ message: "blog_post_1.md\ntech_musings.md", type: "output" }); // Placeholder
+        }
+        break;
+      case "help":
+        newMessages.push({
+          message: COMMAND_LIST.filter(Boolean).join("\n"),
+          type: "output",
+        });
+        break;
+      case "clear":
+        setMessages([]);
+        return;
+      case "socials":
+        newMessages.push({ message: USER_INFO.socialsText, type: "output" });
+        break;
+      case "thoughts":
+      case "blogs":
+        window.location.href = `/${baseCmd}`;
+        newMessages.push({
+          message: `Redirecting to ${baseCmd}...`,
+          type: "output",
+        });
+        break;
+      case "cd":
+        if (!arg || arg === "~" || arg === "/") {
+          setCurrentDir("~");
+        } else if (files.some(f => f.name === arg && (arg === "thoughts" || arg === "blogs"))) {
+          setCurrentDir(arg);
+        } else {
+          newMessages.push({
+            message: `cd: ${arg}: No such directory or not a directory`,
+            type: "output",
+          });
+        }
+        break;
+      case "cat":
+        if (!arg) {
+          newMessages.push({
+            message: "usage: cat <filename>",
+            type: "output",
+          });
+          break;
+        }
+        let fileToCat = null;
+        if (currentDir === "~" || currentDir === "/") {
+          fileToCat = files.find((file) => file.name === arg);
+        } else if (currentDir === "thoughts") {
+          // Placeholder for reading thought files
+          if (arg === "thought1.md") fileToCat = { name: arg, content: "This is my first thought..." }; 
+        } else if (currentDir === "blogs") {
+          // Placeholder for reading blog files
+          if (arg === "blog_post_1.md") fileToCat = { name: arg, content: "My first blog post content..." }; 
+        }
+
+        if (fileToCat) {
+          newMessages.push({ message: fileToCat.content, type: "output" });
+        } else {
+          newMessages.push({
+            message: `cat: ${arg}: No such file or directory`,
+            type: "output",
+          });
+        }
+        break;
+      case "./gui.app":
+        newMessages.push({
+          message: "Opening GUI... (functionality pending)",
+          type: "output",
+        });
+        // setTimeout(() => {
+        //   window.location.href = "/gui";
+        // }, 300);
+        break;
+      case "exit":
+        newMessages.push({ message: "Exiting terminal... Goodbye!", type: "output" });
+        // In a real terminal, this would close the window or tab.
+        // Here, we can just clear the input and messages after a delay.
+        setTimeout(() => {
+          setMessages([]);
+          setInput("");
+        }, 1000);
+        break;
+      default:
+        if (command.trim() !== "") {
+          newMessages.push({
+            message: `${baseCmd}: command not found`,
+            type: "output",
+          });
+        }
+    }
+    setMessages((prev) => [...prev, ...newMessages]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessages((prev) => [...prev, { message: input, type: "input" }]);
-    if (commands.includes(input.toLowerCase().split(" ")[0])) {
-      switch (input.toLowerCase()) {
-        case "reset":
-          setFiles(INITIAL_FILES);
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: "Reset files to initial state",
-              type: "output",
-            },
-          ]);
-          break;
-        case "whoami":
-          setMessages((prev) => [
-            ...prev,
-            { message: "arman", type: "output" },
-          ]);
-          break;
-        case "ls":
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: files.map((file) => file.name).join("\n"),
-              type: "output",
-            },
-          ]);
-          break;
-        case "help":
-          setMessages((prev) => [
-            ...prev,
-            { message: commands.join("\n").slice(1), type: "output" },
-          ]);
-          break;
-        case "clear":
-          setMessages([]);
-          break;
-        case "./gui.app":
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: "opening GUI...",
-              type: "output",
-            },
-          ]);
-          setTimeout(() => {
-            window.location.href = "/gui";
-          }, 300);
-          break;
-        // case "./talk.app":
-        //   setMessages((prev) => [
-        //     ...prev,
-        //     {
-        //       message: "opening talk...",
-        //       type: "output",
-        //     },
-        //   ]);
-        //   setTimeout(() => {
-        //     window.location.href = "/talk";
-        //   }, 300);
-        //   break;
-        default:
-          if (input.toLowerCase().startsWith("cat")) {
-            const fileName = input.toLowerCase().split(" ")[1];
-            if (!fileName) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: "usage: cat <filename> (e.g. cat file.txt)",
-                  type: "output",
-                },
-              ]);
-              break;
-            }
-            const file = files.find((file) => file.name === fileName);
-            if (file) {
-              setMessages((prev) => [
-                ...prev,
-                { message: file.content, type: "output" },
-              ]);
-            } else {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: `cat: ${fileName}: No such file or directory`,
-                  type: "output",
-                },
-              ]);
-            }
-          } else if (input.toLowerCase().startsWith("touch")) {
-            const fileName = input.toLowerCase().split(" ")[1];
-            if (!fileName) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: "usage: touch <filename> (e.g. touch file.txt)",
-                  type: "output",
-                },
-              ]);
-              break;
-            }
-            if (files.find((file) => file.name === fileName)) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: `touch: cannot touch '${fileName}': File exists`,
-                  type: "output",
-                },
-              ]);
-            } else {
-              setInput("");
-              try {
-                const image = await fetch(
-                  `https://cataas.com/cat?width=200&height=200`
-                ).then((data) => data.blob());
-                const imageUrl = URL.createObjectURL(image);
-                // @ts-expect-error we are setting content to an image, not string
-                setFiles((prev) => [
-                  ...prev,
-                  {
-                    name: fileName,
-                    content: (
-                      <img
-                        src={imageUrl}
-                        alt="cat"
-                        className="w-40 h-40 object-cover"
-                      />
-                    ),
-                  },
-                ]);
-              } catch (error) {
-                // in case we get rate limited
-                setFiles((prev) => [
-                  ...prev,
-                  {
-                    name: fileName,
-                    content: "🐈",
-                  },
-                ]);
-              }
-              return;
-            }
-          } else if (input.toLowerCase().startsWith("rm")) {
-            const fileName = input.toLowerCase().split(" ")[1];
-            if (!fileName) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: "usage: rm <filename> (e.g. rm file.txt)",
-                  type: "output",
-                },
-              ]);
-              break;
-            }
-            if (files.find((file) => file.name === fileName)) {
-              setFiles((prev) => prev.filter((file) => file.name !== fileName));
-            } else {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: `rm: ${fileName}: No such file or directory`,
-                  type: "output",
-                },
-              ]);
-            }
-          } else if (input.toLowerCase().startsWith("cd")) {
-            if (input.toLowerCase().trim() === "cd") {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: "",
-                  type: "output",
-                },
-              ]);
-              break;
-            }
-            if (input.toLowerCase().split(" ").length > 2) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: `cd: too many arguments`,
-                  type: "output",
-                },
-              ]);
-              break;
-            }
-            const directory = input.toLowerCase().split(" ")[1];
-            if (directory == "thoughts") {
-              window.location.href = "/thoughts";
-            } else {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  message: `cd: no such file or directory: ${directory}`,
-                  type: "output",
-                },
-              ]);
-            }
-          }
-      }
-    } else {
-      setMessages((prev) => [
-        ...prev,
-        {
-          message: `cli: command not found: ${input}`,
-          type: "output",
-        },
-      ]);
-    }
+    if (input.trim() === "") return;
+    setMessages((prev) => [...prev, { message: `${currentDir} $ ${input}`, type: "input" }]);
+    executeCommand(input);
     setInput("");
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") {
-        setInput(
-          messages
-            .filter((message) => message.type === "input")
-            .map((message) => message.message)
-            .pop() || ""
-        );
-      }
-    };
-
-    document.getElementById("cli")?.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
-    <div className="w-full">
-      {messages.map((message, i) => (
-        <p
-          key={i}
-          className={
-            message.type === "input"
-              ? "text-indigo-300"
-              : "text-green-300 whitespace-pre-wrap"
-          }
-        >
-          <span className="text-indigo-300">
-            {message.type === "input" ? "> " : ""}
-          </span>
-          {message.message}
-        </p>
-      ))}
-      <div ref={bottomRef} />
-      <form
-        id="cli"
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-full"
-      >
-        <div className="flex">
-          <span className="mr-2">$</span>
-          <input
-            type="text"
-            placeholder={
-              messages.length === 0 ? "type `help` for a list of commands" : ""
-            }
-            className="bg-transparent border-none outline-none flex-grow w-full"
-            autoFocus
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
+    <div
+      className="bg-black text-white font-mono p-4 h-[calc(100vh-200px)] max-h-[600px] w-full max-w-2xl mx-auto overflow-y-auto rounded-lg border border-gray-700 text-sm"
+      onClick={() => inputRef.current?.focus()}
+    >
+      <div className="mb-2">
+        <p>Welcome to Vishvendra's Terminal!</p>
+        <p>Type 'help' to see available commands.</p>
+        <p>---</p>
+      </div>
+      {messages.map((msg, index) => (
+        <div key={index} className={`whitespace-pre-wrap ${msg.type === "input" ? "text-green-400" : ""}`}>
+          {typeof msg.message === 'string' && msg.type === 'output' 
+            ? msg.message.split('\n').map((line, i) => <div key={i}>{line}</div>)
+            : msg.message}
         </div>
+      ))}
+      <form onSubmit={handleSubmit} className="flex mt-2">
+        <span className="text-yellow-400">{currentDir} $&nbsp;</span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="bg-transparent border-none outline-none flex-grow text-green-400"
+          autoFocus
+        />
       </form>
+      <div ref={bottomRef} />
     </div>
   );
 }
