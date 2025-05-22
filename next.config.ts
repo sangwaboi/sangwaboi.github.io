@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
-const repo = 'sangwaboi.github.io';
+const repo = process.env.GITHUB_REPOSITORY?.replace(/.*?\//, '') || 'sangwaboi.github.io';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
   },
   output: 'export',
   distDir: 'out',
+  basePath: isGithubActions ? `/${repo}` : '',
+  assetPrefix: isGithubActions ? `/${repo}/` : '',
+  trailingSlash: true,
 };
 
 export default nextConfig;
