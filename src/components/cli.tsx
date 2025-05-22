@@ -16,25 +16,26 @@ const INITIAL_FILES = [
       "twitter: sangwaboii\ngithub: sangwaboi\nlinkedin: sangwa-vishvendra",
   },
   {
+    name: "resume.txt",
+    content: "My resume - run 'cd resume.txt' to download",
+  },
+  {
     name: "gui.app",
     content: "run './gui.app' to open the GUI version of this website (if available)",
   },
 ];
 
 const COMMAND_LIST = [
-  "",
   "whoami",
   "ls",
   "help",
   "cd",
   "cat",
   "clear",
-  "socials",
-  "thoughts",
-  "blogs",
+  "rm",
+  "touch",
   "reset",
-  "./gui.app",
-  "exit", // Added exit to the command list
+  "./gui.app"
 ];
 
 interface Message {
@@ -48,18 +49,23 @@ interface File {
 }
 
 const USER_INFO = {
-  name: "Vishvendra Sangwa",
-  bio: "Student of Computer Science and AI/ML at the School of Tech Polaris. Interested in web3, Robotics, and AI agentic flows. Believer in authentic, compounding relationships. Currently building some BaaS.",
-  location: "Bengaluru, KA",
-  socialsText:
-    "twitter: https://x.com/sangwaboii\ngithub: https://github.com/sangwaboi\nlinkedin: https://www.linkedin.com/in/sangwa-vishvendra/",
+  name: "sangwaboi",
+  // bio: "Student of Computer Science and AI/ML at the School of Tech Polaris. Interested in web3, Robotics, and AI agentic flows. Believer in authentic, compounding relationships. Currently building some BaaS.",
+  // location: "Bengaluru, KA",
+  // socialsText:
+  //   "twitter: https://x.com/sangwaboii\ngithub: https://github.com/sangwaboi\nlinkedin: https://www.linkedin.com/in/sangwa-vishvendra/",
 };
 
-function CLI() {
+interface CLIProps {
+  hidePrefilledBio?: boolean;
+}
+
+function CLI({ hidePrefilledBio = false }: CLIProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>(INITIAL_FILES);
   const [currentDir, setCurrentDir] = useState("~");
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,8 +87,8 @@ function CLI() {
         break;
       case "whoami":
         newMessages.push({ message: USER_INFO.name, type: "output" });
-        newMessages.push({ message: USER_INFO.bio, type: "output" });
-        newMessages.push({ message: USER_INFO.location, type: "output" });
+        // newMessages.push({ message: USER_INFO.bio, type: "output" });
+        // newMessages.push({ message: USER_INFO.location, type: "output" });
         break;
       case "ls":
         if (currentDir === "~" || currentDir === "/") {
@@ -121,6 +127,20 @@ function CLI() {
           setCurrentDir("~");
         } else if (files.some(f => f.name === arg && (arg === "thoughts" || arg === "blogs"))) {
           setCurrentDir(arg);
+        } else if (arg === "resume.txt") {
+          newMessages.push({
+            message: "Downloading resume...",
+            type: "output",
+          });
+          
+          // Create an anchor element to download the resume
+          const downloadLink = document.createElement('a');
+          downloadLink.href = '/Resume.pdf';  // Path to your resume in the public folder
+          downloadLink.download = 'Vishvendra_Sangwa_Resume.pdf';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          
         } else {
           newMessages.push({
             message: `cd: ${arg}: No such directory or not a directory`,
@@ -158,12 +178,12 @@ function CLI() {
         break;
       case "./gui.app":
         newMessages.push({
-          message: "Opening GUI... (functionality pending)",
+          message: "Opening GUI...",
           type: "output",
         });
-        // setTimeout(() => {
-        //   window.location.href = "/gui";
-        // }, 300);
+        setTimeout(() => {
+          window.location.href = "/gui";
+        }, 300);
         break;
       case "exit":
         newMessages.push({ message: "Exiting terminal... Goodbye!", type: "output" });
@@ -188,9 +208,10 @@ function CLI() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() === "") return;
-    setMessages((prev) => [...prev, { message: `${currentDir} $ ${input}`, type: "input" }]);
+    setMessages((prev) => [...prev, { message: `$ ${input}`, type: "input" }]);
     executeCommand(input);
     setInput("");
+    setHasInteracted(true);
   };
 
   useEffect(() => {
@@ -207,29 +228,25 @@ function CLI() {
 
   return (
     <div
-      className="bg-black text-white font-mono p-4 h-[calc(100vh-200px)] max-h-[600px] w-full max-w-2xl mx-auto overflow-y-auto rounded-lg border border-gray-700 text-sm"
+      className="bg-transparent text-white font-mono w-full overflow-y-auto text-xl"
       onClick={() => inputRef.current?.focus()}
     >
-      <div className="mb-2">
-        <p>Welcome to Vishvendra's Terminal!</p>
-        <p>Type 'help' to see available commands.</p>
-        <p>---</p>
-      </div>
       {messages.map((msg, index) => (
-        <div key={index} className={`whitespace-pre-wrap ${msg.type === "input" ? "text-green-400" : ""}`}>
-          {typeof msg.message === 'string' && msg.type === 'output' 
-            ? msg.message.split('\n').map((line, i) => <div key={i}>{line}</div>)
+        <div key={index} className={`whitespace-pre-wrap ${msg.type === "input" ? "text-white" : "text-orange-400"}`}>
+          {typeof msg.message === 'string' 
+            ? msg.message
             : msg.message}
         </div>
       ))}
-      <form onSubmit={handleSubmit} className="flex mt-2">
-        <span className="text-yellow-400">{currentDir} $&nbsp;</span>
+      <form onSubmit={handleSubmit} className="flex">
+        <span className="text-white mr-2">$</span>
         <input
           ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="bg-transparent border-none outline-none flex-grow text-green-400"
+          className="bg-transparent border-none outline-none flex-grow text-white text-xl"
+          placeholder={hasInteracted ? "" : "type 'help' for a list of commands"}
           autoFocus
         />
       </form>

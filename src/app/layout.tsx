@@ -21,6 +21,11 @@ export const metadata: Metadata = {
     "robotics",
     "web3"
   ],
+  icons: {
+    icon: '/apple-touch-icon.png', // Using the specific file as the main icon
+    apple: '/apple-touch-icon.png', // Also for apple devices
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     title: "Vishvendra Sangwa's Space",
     url: "https://sangwaboi.me", // Updated to custom domain
@@ -50,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ fontFamily: 'monospace' }}>
       <body>
         {children}
         <Analytics />
