@@ -35,6 +35,7 @@ const COMMAND_LIST = [
   "rm",
   "touch",
   "reset",
+  "socials",
   "./gui.app"
 ];
 
@@ -52,8 +53,7 @@ const USER_INFO = {
   name: "sangwaboi",
   // bio: "Student of Computer Science and AI/ML at the School of Tech Polaris. Interested in web3, Robotics, and AI agentic flows. Believer in authentic, compounding relationships. Currently building some BaaS.",
   // location: "Bengaluru, KA",
-  // socialsText:
-  //   "twitter: https://x.com/sangwaboii\ngithub: https://github.com/sangwaboi\nlinkedin: https://www.linkedin.com/in/sangwa-vishvendra/",
+  socialsText: "twitter: https://x.com/sangwaboii\ngithub: https://github.com/sangwaboi\nlinkedin: https://www.linkedin.com/in/sangwa-vishvendra/",
 };
 
 interface CLIProps {

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { submitMessage } from "../actions";
 import Link from "next/link";
 
 function page() {
@@ -10,31 +9,19 @@ function page() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  // For static export, this is just a placeholder
   const handleSubmit = async () => {
     setSuccess(false);
     setLoading(true);
 
-    if (message.trim().length < 1) {
-      setSuccess(false);
-      setError("message is required");
+    // Simulate server response
+    setTimeout(() => {
+      setName("");
+      setMessage("");
+      setError("");
+      setSuccess(true);
       setLoading(false);
-      return;
-    }
-
-    await submitMessage(name, message)
-      .then(() => {
-        // sorry
-        setName("");
-        setMessage("");
-        setError("");
-        setSuccess(true);
-        setLoading(false);
-      })
-      .catch(() => {
-        setSuccess(false);
-        setLoading(false);
-        setError("something went wrong, dm me on twitter and i'll fix it");
-      });
+    }, 1000);
   };
 
   return (
@@ -80,7 +67,7 @@ function page() {
               <p>[...]</p>
             ) : (
               <p
-                // onClick={handleSubmit}
+                onClick={handleSubmit}
                 className="hover:text-blue-300 hover:underline underline-offset-4 cursor-pointer"
               >
                 [submit]
