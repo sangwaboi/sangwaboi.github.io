@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+const repo = 'sangwaboi.github.io';
+
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
@@ -18,7 +21,10 @@ const nextConfig: NextConfig = {
           "/system/resources/thumbnails/025/221/361/small_2x/cartoon-cat-cute-ai-generate-png.png",
       },
     ],
+    unoptimized: true,
   },
+  output: 'export',
+  distDir: 'out',
 };
 
 export default nextConfig;
